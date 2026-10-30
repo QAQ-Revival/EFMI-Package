@@ -2,3 +2,6 @@
 /!RELEASES/
 /!TRASH/
 *.bin
+
+/build/
+__pycache__/

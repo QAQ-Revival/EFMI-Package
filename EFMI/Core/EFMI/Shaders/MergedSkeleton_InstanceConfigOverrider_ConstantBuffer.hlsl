@@ -16,7 +16,7 @@ cbuffer cb0 : register(b0)
     uint4 InstanceConfigCB[16];
 }
 
-RWBuffer<uint4> InstanceConfigRW : register(u0);
+RWStructuredBuffer<uint4> InstanceConfigRW : register(u0);
 
 //RWBuffer<float4> DebugRW : register(u7);
 

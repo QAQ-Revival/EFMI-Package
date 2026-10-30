@@ -1,0 +1,27 @@
+{
+  "upstream": "SpectrumQT/EFMI-Package",
+  "reviewedUpstream": "3d40c54ba86fdfd0e26d8ccbbd3848632f063b06",
+  "changes": [
+    "Match structured skeleton buffers to an RWStructuredBuffer<uint4> UAV",
+    "Build matching cs_5_0 bytecode from source with flags 0x8000 instead of storing compiled caches in git",
+    "Package the reviewed official INI and HLSL with explicit version metadata for reversible component switching"
+  ],
+  "validation": "WARP verifies the instance header and unchanged bone payload for structured and legacy typed sources",
+  "compatibleFiles": {
+    "Core/EFMI/MergedSkeleton.ini": [
+      "a61b4c093f35aac884a7c8ad0a381d8b523601e0649b897c34c07d65983fb855",
+      "df197ef2ba290fc98eb77a8265cb5af8db1eff6c90fd4d674a3af26ebbc5efef",
+      "659caebec8d96a33660581f213833f9076d85b786110e026bf9420311ce981f0"
+    ],
+    "Core/EFMI/Shaders/MergedSkeleton_InstanceConfigOverrider_ConstantBuffer.hlsl": [
+      "469acb568e57bdbb54c00d833bf2d2f674d3d4e7276bae9062b42d25b8f9d523",
+      "98071dc686708588136ac0fa433799b382865118ab056f091a9d4b35b14f24bf",
+      "2dffd9615dd3f9453849416ea9d39056a3e6eb21dd2161bad639cdc0a9549035"
+    ],
+    "Core/EFMI/Shaders/MergedSkeleton_InstanceConfigOverrider_ConstantBuffer.cs_5_0.8000.bin": [
+      "0465d3fd9f0ea487abdb1b4394fc070f83b30a5e9ab5492d005495435c112764",
+      "fdb091223d96986ceaa955a8398822d419d6a9d44d97c3e952b996dffc43f960",
+      null
+    ]
+  }
+}
