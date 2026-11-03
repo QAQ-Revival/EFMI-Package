@@ -1,6 +1,6 @@
 {
   "upstream": "SpectrumQT/EFMI-Package",
-  "reviewedUpstream": "3d40c54ba86fdfd0e26d8ccbbd3848632f063b06",
+  "reviewedUpstream": "b3019e9adbc7466395769985e9d93007b8508ead",
   "changes": [
     "Match structured skeleton buffers to an RWStructuredBuffer<uint4> UAV",
     "Build matching cs_5_0 bytecode from source with flags 0x8000 instead of storing compiled caches in git",
