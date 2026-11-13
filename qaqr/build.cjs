@@ -68,7 +68,9 @@ function build({ output = path.join(root, 'build/component'), verifyOnly = false
   fs.copyFileSync(path.join(root, 'LICENSE'), path.join(output, 'LICENSE'));
   git(['archive', '--format=zip', '--output=' + path.join(output, 'source.zip'), 'HEAD']);
   const official = writeOfficial(output);
-  fs.writeFileSync(path.join(output, 'component.json'), JSON.stringify({ source: 'https://github.com/QAQ-Revival/EFMI-Package', sourceCommit: git(['rev-parse', 'HEAD']), validation: 'D3D11 WARP', gameRuntimeValidated: false, compatibleFiles: require('./changes.json').compatibleFiles, official, files: listFiles(output) }, null, 2));
+  // QAQR numbers its build <upstream version>.<n>, n counting QAQR's own commits on top of that upstream release.
+  const patches = git(['rev-list', '--count', '--no-merges', '--author=qaq-revival-publisher', `${official.commit}..HEAD`]);
+  fs.writeFileSync(path.join(output, 'component.json'), JSON.stringify({ source: 'https://github.com/QAQ-Revival/EFMI-Package', sourceCommit: git(['rev-parse', 'HEAD']), version: `${official.version}.${patches}`, validation: 'D3D11 WARP', gameRuntimeValidated: false, compatibleFiles: require('./changes.json').compatibleFiles, official, files: listFiles(output) }, null, 2));
   return output;
 }
 if (require.main === module) build({ verifyOnly: process.argv.includes('--verify-only') });
