@@ -18,14 +18,17 @@ const coreVersion = text => {
 // and whatever sits in an install may already be patched, so they come from the upstream commit.
 function writeOfficial(output) {
   const changes = require('./changes.json');
-  let commit = changes.reviewedUpstream;
-  try { commit = git(['merge-base', 'HEAD', 'refs/remotes/upstream/main']); } catch { /* no upstream remote in this checkout */ }
+  // The baseline is whatever upstream commit this fork last merged. A CI checkout has no upstream
+  // remote, and a local one may be stale, so the branch is fetched here; offline, the last fetch serves.
+  const upstream = 'refs/remotes/upstream/main';
+  try { git(['fetch', '--no-tags', '--no-recurse-submodules', 'https://github.com/' + changes.upstream + '.git', '+refs/heads/main:' + upstream]); } catch { /* offline */ }
+  const commit = git(['merge-base', 'HEAD', upstream]);
   const blob = relative => {
     const command = spawnSync('git', ['cat-file', 'blob', `${commit}:EFMI/${relative}`], { cwd: root, windowsHide: true, maxBuffer: 16 * 1024 * 1024 });
     return command.status ? null : command.stdout;
   };
   const version = coreVersion(blob('Core/EFMI/main.ini').toString('utf8'));
-  if (version !== coreVersion(fs.readFileSync(path.join(root, 'EFMI/Core/EFMI/main.ini'), 'utf8'))) throw Error('EFMI baseline ' + commit + ' is behind the fork; update reviewedUpstream');
+  if (version !== coreVersion(fs.readFileSync(path.join(root, 'EFMI/Core/EFMI/main.ini'), 'utf8'))) throw Error('EFMI baseline ' + commit + ' is behind the fork; the upstream branch could not be fetched');
   const files = [];
   for (const relative of Object.keys(changes.compatibleFiles)) {
     const bytes = blob(relative);
