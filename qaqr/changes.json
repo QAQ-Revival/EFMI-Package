@@ -1,5 +1,15 @@
 {
   "upstream": "SpectrumQT/EFMI-Package",
+  "officialRelease": {
+    "tag": "v1.5.1",
+    "commit": "45e0ca07af9db81b0907c537c413d281db4f235b",
+    "archiveSha256": "10b350c620054a3a3d46d704789abbdd83ef43afdfd3b70932a036236e426c0a",
+    "files": {
+      "Core/EFMI/MergedSkeleton.ini": "905fa5e4e98605261110f3aac0a677b37651625d79ff2ed763541faef2b9a178",
+      "Core/EFMI/Shaders/MergedSkeleton_InstanceConfigOverrider_ConstantBuffer.hlsl": "469acb568e57bdbb54c00d833bf2d2f674d3d4e7276bae9062b42d25b8f9d523",
+      "Core/EFMI/Shaders/MergedSkeleton_InstanceConfigOverrider_ConstantBuffer.cs_5_0.8000.bin": null
+    }
+  },
   "changes": [
     "Match structured skeleton buffers to an RWStructuredBuffer<uint4> UAV",
     "Build matching cs_5_0 bytecode from source with flags 0x8000 instead of storing compiled caches in git",
@@ -8,6 +18,7 @@
   "validation": "WARP verifies the instance header and unchanged bone payload for structured and legacy typed sources",
   "compatibleFiles": {
     "Core/EFMI/MergedSkeleton.ini": [
+      "905fa5e4e98605261110f3aac0a677b37651625d79ff2ed763541faef2b9a178",
       "a61b4c093f35aac884a7c8ad0a381d8b523601e0649b897c34c07d65983fb855",
       "df197ef2ba290fc98eb77a8265cb5af8db1eff6c90fd4d674a3af26ebbc5efef",
       "659caebec8d96a33660581f213833f9076d85b786110e026bf9420311ce981f0"

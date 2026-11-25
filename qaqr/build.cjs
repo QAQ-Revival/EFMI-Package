@@ -27,19 +27,26 @@ function writeOfficial(output) {
     const command = spawnSync('git', ['cat-file', 'blob', `${commit}:EFMI/${relative}`], { cwd: root, windowsHide: true, maxBuffer: 16 * 1024 * 1024 });
     return command.status ? null : command.stdout;
   };
-  const version = coreVersion(blob('Core/EFMI/main.ini').toString('utf8'));
+  // The 1.5.1 ZIP changed four files without advancing the source tag. The restored
+  // files still come from that commit and must match the reviewed release byte for byte.
+  const release = changes.officialRelease?.commit === commit ? changes.officialRelease : null;
+  const version = release ? release.tag.slice(1) : coreVersion(blob('Core/EFMI/main.ini').toString('utf8'));
   if (version !== coreVersion(fs.readFileSync(path.join(root, 'EFMI/Core/EFMI/main.ini'), 'utf8'))) throw Error('EFMI baseline ' + commit + ' is behind the fork; the upstream branch could not be fetched');
   const files = [];
   for (const relative of Object.keys(changes.compatibleFiles)) {
-    const bytes = blob(relative);
+    const source = blob(relative);
+    const bytes = source && Buffer.from(source.toString('utf8').replace(/\r?\n/g, '\r\n'));
+    if (release && release.files[relative] !== (bytes && crypto.createHash('sha256').update(bytes).digest('hex'))) {
+      throw Error('Official EFMI file differs from the release: ' + relative);
+    }
     if (!bytes) continue;
     const destination = path.join(output, 'official', relative);
     fs.mkdirSync(path.dirname(destination), { recursive: true });
     // Releases ship CRLF; the repository stores LF.
-    fs.writeFileSync(destination, bytes.toString('utf8').replace(/\r?\n/g, '\r\n'));
+    fs.writeFileSync(destination, bytes);
     files.push(relative);
   }
-  return { version, commit, files };
+  return { version, commit, ...(release ? { tag: release.tag, archiveSha256: release.archiveSha256 } : {}), files };
 }
 
 function listFiles(output) {
